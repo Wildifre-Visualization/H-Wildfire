@@ -16,12 +16,19 @@ var thirdYears = [2008,2009,2010,2011,2012,2013,2014,2015];
 years.push(firstYears);
 years.push(secondYears);
 years.push(thirdYears);
- 
+
+
+//Need to remove current source/layer first THEN add the appropriate source/layer
+
+//Could track the previous layer with a continuously updating variable 
+//or remove any and all layers
 for (const input of inputs) {
     input.onclick = (layer) => {
         const layerId = layer.target.id;
         const layerValue = layer.target.value;
-        map.addSource('earthquakes ' + layerId, {
+
+
+        map.addSource('wildfires ' + layerId, {
             'type': 'geojson',
             'data': data.filter((result) => result.year in years[layerValue]),
         });
@@ -31,7 +38,7 @@ for (const input of inputs) {
 
     const map = new mapboxgl.Map({
         container: 'map',
-        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        // Choose from Mapbox's core styles
         style: 'mapbox://styles/mapbox/satellite-streets-v12',
         center: [-98, 38],
         zoom: 4.3
@@ -44,7 +51,7 @@ for (const input of inputs) {
             'type': 'geojson',
             'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
         });
-        // This map source is temporary. Should be replaced with the .onclick code above 
+        // This map source is temporary. Should be replaced with the input.onclick code above 
         // eventually to change the data depending on which timeframe is selected.
 
         map.addLayer(
