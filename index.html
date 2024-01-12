@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Wildfire Visualizations</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+#menu {
+    position: absolute;
+    background: #efefef;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div id="menu">
+    <!-- See a list of Mapbox-hosted public styles at -->
+    <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+    <input id="1992-2000" type="radio" name="rtoggle" value="0" checked="checked">
+    <label for="1992-2000">1992-2000</label>
+    <input id="2000-2008" type="radio" name="rtoggle" value="1">
+    <label for="2000-2008">2000-2008</label>
+    <input id="2008-2015" type="radio" name="rtoggle" value="2">
+    <label for="2008-2015">2008-2015</label>
+ 
+<script type="text/javascript" src="js/heatmap.js"></script>
+ 
+</body>
+</html>
