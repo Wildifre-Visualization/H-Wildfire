@@ -2,6 +2,7 @@ from flask import Flask
 from pymongo import MongoClient
 import json
 from flask import jsonify
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -35,7 +36,8 @@ def welcome():
     """List all available api routes."""
     return (
         f"Available Routes:<br/>"
-        f"/api/v1/wildfires - List wildfires data<br/>"
+        f"<a href='/api/v1/wildfires'>/api/v1/wildfires</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
+        f"<a href='/api/v1/mapbox'>/api/v1/mapbox</a><br>"
     )
 
 
@@ -52,6 +54,11 @@ def get_wildfires_data():
         document['_id'] = str(document['_id'])
 
     return jsonify(data_list)
+
+
+@app.route('/api/v1/mapbox')
+def show_html():
+    return render_template("index.html")
 
 
 if __name__ == '__main__':
