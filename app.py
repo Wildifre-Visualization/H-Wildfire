@@ -13,7 +13,7 @@ collection = db['wildfires']
 
 
 def load_data():
-    file_path = './Resources/Wildfires 2.json'
+    file_path = './Resources/Wildfires 2.geojson'
     with open(file_path, 'r') as file:
         data = json.load(file)
         # Check if data is already loaded in the database to avoid duplicate entries
