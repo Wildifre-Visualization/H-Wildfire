@@ -59,12 +59,25 @@ load_data(file_paths, collections)
 def get_wildfires_data(collection):
     # Retrieve data from MongoDB
     data_cursor = collection.find(
-        {}, {"_id": 0, "features.geometry.coordinates": 1}).limit(5)
+        {}, {"_id": 0, "features.geometry": 1, "features.properties": 1})
 
     # Convert cursor to list
     data_list = list(data_cursor)
 
-    return jsonify(data_list)
+    # Extract relevant fields from each document
+    formatted_data = []
+    for data in data_list:
+        for i in range(1, 5):
+            geometry = data['features'][i]['geometry']['coordinates']
+            properties = data['features'][i]['properties']
+            formatted_data.append({
+                'geometry': {
+                    'coordinates': geometry
+                },
+                'properties': properties
+            })
+
+    return jsonify(formatted_data)
 
 
 @app.route("/")
