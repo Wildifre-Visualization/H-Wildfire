@@ -34,8 +34,6 @@ file_paths = [
     './Resources/third_years.geojson'
 ]
 
-collections = [collection1, collection2, collection3]
-
 
 def load_data(file_paths, collections):
     for file_path, collection in zip(file_paths, collections):
@@ -48,33 +46,23 @@ def load_data(file_paths, collections):
                 else:
                     # Use insert_one for a single record
                     collection.insert_one(data)
-                print(f"Data loaded into collection {collection.name}.")
             else:
                 print(
                     f"Data already loaded in the collection {collection.name}.")
 
-
-file_paths = [
-    './Resources/wildfires_1992_1999.geojson',
-    './Resources/wildfires_2000_2007.geojson',
-    './Resources/wildfires_2008_2015.geojson'
-]
 
 collections = [collection1, collection2, collection3]
 
 load_data(file_paths, collections)
 
 
-def get_wildfires_data(collection, limit):
+def get_wildfires_data(collection):
     # Retrieve data from MongoDB
-    data_cursor = collection.find().limit(limit)
+    data_cursor = collection.find(
+        {}, {"_id": 0, "features.geometry.coordinates": 1, "features.properties": 1}).limit(5)
 
     # Convert cursor to list
     data_list = list(data_cursor)
-
-    # Convert ObjectId to string, because MongoDB uses ObjectId type and JSON does not support it
-    for document in data_list:
-        document['_id'] = str(document['_id'])
 
     return jsonify(data_list)
 
@@ -95,17 +83,17 @@ def welcome():
 
 @app.route('/api/v1/wildfires/1992-1999')
 def wildfires_1992_1999():
-    return get_wildfires_data(collection1, 5)
+    return get_wildfires_data(collection1)
 
 
 @app.route('/api/v1/wildfires/2000-2007')
 def wildfires_2000_2007():
-    return get_wildfires_data(collection2, 5)
+    return get_wildfires_data(collection2)
 
 
 @app.route('/api/v1/wildfires/2008-2015')
 def wildfires_2008_2015():
-    return get_wildfires_data(collection3, 5)
+    return get_wildfires_data(collection3)
 
 
 @app.route('/api/v1/mapbox')
