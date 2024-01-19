@@ -59,7 +59,7 @@ load_data(file_paths, collections)
 def get_wildfires_data(collection):
     # Retrieve data from MongoDB
     data_cursor = collection.find(
-        {}, {"_id": 0, "features.geometry.coordinates": 1, "features.properties": 1}).limit(5)
+        {}, {"_id": 0, "features.geometry.coordinates": 1}).limit(5)
 
     # Convert cursor to list
     data_list = list(data_cursor)
