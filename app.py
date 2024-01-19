@@ -8,45 +8,6 @@ app = Flask(__name__)
 
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
-<<<<<<< HEAD
-db = client['wildfires_db']
-collection = db['wildfires']
-
-
-def load_data():
-    file_path = './Resources/Wildfires 2.geojson'
-    with open(file_path, 'r') as file:
-        data = json.load(file)
-        # Check if data is already loaded in the database to avoid duplicate entries
-        if collection.count_documents({}) == 0:
-            if isinstance(data, list):  # Check if data is a list of records
-                collection.insert_many(data)  # Use insert_many for list
-            else:
-                # Use insert_one for a single record
-                collection.insert_one(data)
-        else:
-            print("Data already loaded in the database.")
-    return
-
-
-load_data()
-
-
-@app.route("/")
-def welcome():
-    """List all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"<a href='/api/v1/wildfires'>/api/v1/wildfires</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
-        f"<a href='/api/v1/mapbox'>/api/v1/mapbox</a><br>"
-    )
-
-
-@app.route('/api/v1/wildfires')
-def get_wildfires_data():
-    # Retrieve data from MongoDB
-    data_cursor = collection.find().limit(5)
-=======
 db = client['wildfires']
 collection1 = db['1992-1999']
 collection2 = db['2000-2007']
@@ -68,12 +29,13 @@ collection3 = db['2008-2015']
 #             print("Data already loaded in the database.")
 #     return
 file_paths = [
-    './Resources/wildfires_1992_1999.geojson',
-    './Resources/wildfires_2000_2007.geojson',
-    './Resources/wildfires_2008_2015.geojson'
+    './Resources/first_years.geojson',
+    './Resources/second_years.geojson',
+    './Resources/third_years.geojson'
 ]
 
 collections = [collection1, collection2, collection3]
+
 
 def load_data(file_paths, collections):
     for file_path, collection in zip(file_paths, collections):
@@ -88,7 +50,10 @@ def load_data(file_paths, collections):
                     collection.insert_one(data)
                 print(f"Data loaded into collection {collection.name}.")
             else:
-                print(f"Data already loaded in the collection {collection.name}.")
+                print(
+                    f"Data already loaded in the collection {collection.name}.")
+
+
 file_paths = [
     './Resources/wildfires_1992_1999.geojson',
     './Resources/wildfires_2000_2007.geojson',
@@ -99,10 +64,10 @@ collections = [collection1, collection2, collection3]
 
 load_data(file_paths, collections)
 
+
 def get_wildfires_data(collection, limit):
     # Retrieve data from MongoDB
     data_cursor = collection.find().limit(limit)
->>>>>>> B
 
     # Convert cursor to list
     data_list = list(data_cursor)
@@ -113,8 +78,7 @@ def get_wildfires_data(collection, limit):
 
     return jsonify(data_list)
 
-<<<<<<< HEAD
-=======
+
 @app.route("/")
 def welcome():
     """List all available API routes."""
@@ -125,20 +89,24 @@ def welcome():
         f"<a href='/api/v1/wildfires/2008-2015'>/api/v1/wildfires/2008-2015</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
         f"<a href='/api/v1/mapbox'>/api/v1/mapbox</a><br>"
     )
-    
+
 # @app.route('/api/v1/wildfires(1992-1999)')
+
+
 @app.route('/api/v1/wildfires/1992-1999')
 def wildfires_1992_1999():
     return get_wildfires_data(collection1, 5)
+
 
 @app.route('/api/v1/wildfires/2000-2007')
 def wildfires_2000_2007():
     return get_wildfires_data(collection2, 5)
 
+
 @app.route('/api/v1/wildfires/2008-2015')
 def wildfires_2008_2015():
-    return get_wildfires_data(collection3, 5) 
->>>>>>> B
+    return get_wildfires_data(collection3, 5)
+
 
 @app.route('/api/v1/mapbox')
 def show_html():
