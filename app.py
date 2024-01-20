@@ -55,11 +55,12 @@ collections = [collection1, collection2, collection3]
 
 load_data(file_paths, collections)
 
+# gets the first 5 wildfires from the database for a collection
 
-def get_wildfires_data(collection):
+
+def get_sample_wildfires_data(collection):
     # Retrieve data from MongoDB
-    data_cursor = collection.find(
-        {}, {"_id": 0, "features.geometry": 1, "features.properties": 1})
+    data_cursor = collection.find({}, {"features": 1})
 
     # Convert cursor to list
     data_list = list(data_cursor)
@@ -67,17 +68,30 @@ def get_wildfires_data(collection):
     # Extract relevant fields from each document
     formatted_data = []
     for data in data_list:
-        for i in range(1, 5):
-            geometry = data['features'][i]['geometry']['coordinates']
-            properties = data['features'][i]['properties']
-            formatted_data.append({
-                'geometry': {
-                    'coordinates': geometry
-                },
-                'properties': properties
-            })
+        for feature in data['features']:
+            formatted_data.append(feature)
+            if len(formatted_data) >= 5:
+                break
+        if len(formatted_data) >= 5:
+            break
 
-    return jsonify(formatted_data)
+    return jsonify({"features": formatted_data[:5]})
+
+
+def get_all_wildfires_data(collection):
+    # Retrieve data from MongoDB
+    data_cursor = collection.find({}, {"features": 1})
+
+    # Convert cursor to list
+    data_list = list(data_cursor)
+
+    # Extract relevant fields from each document
+    formatted_data = []
+    for data in data_list:
+        for feature in data['features']:
+            formatted_data.append(feature)
+
+    return jsonify({"features": formatted_data})
 
 
 @app.route("/")
@@ -85,28 +99,28 @@ def welcome():
     """List all available API routes."""
     return (
         f"Available Routes:<br/>"
-        f"<a href='/api/v1/wildfires/1992-1999'>/api/v1/wildfires/1992-1999</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
-        f"<a href='/api/v1/wildfires/2000-2007'>/api/v1/wildfires/2000-2007</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
-        f"<a href='/api/v1/wildfires/2008-2015'>/api/v1/wildfires/2008-2015</a> - List wildfires JSON data, loaded in a MongoDB server. First 5 results.<br/>"
+        f"<a href='/api/v1/wildfires/2000-2004'>/api/v1/wildfires/2000-2004</a> - 00-04 MongoDB First 5 results in JSON.<br/>"
+        f"<a href='/api/v1/wildfires/2005-2009'>/api/v1/wildfires/2005-2009</a> - 05-09 MongoDB First 5 results in JSON.<br/>"
+        f"<a href='/api/v1/wildfires/2010-2015'>/api/v1/wildfires/2010-2015</a> - 10-15 MongoDB First 5 results in JSON.<br/>"
         f"<a href='/api/v1/mapbox'>/api/v1/mapbox</a><br>"
     )
 
 # @app.route('/api/v1/wildfires(1992-1999)')
 
 
-@app.route('/api/v1/wildfires/1992-1999')
-def wildfires_1992_1999():
-    return get_wildfires_data(collection1)
+@app.route('/api/v1/wildfires/2000-2004')
+def wildfires_2000_2004():
+    return get_sample_wildfires_data(collection1)
 
 
-@app.route('/api/v1/wildfires/2000-2007')
-def wildfires_2000_2007():
-    return get_wildfires_data(collection2)
+@app.route('/api/v1/wildfires/2005-2009')
+def wildfires_2005_2009():
+    return get_sample_wildfires_data(collection2)
 
 
-@app.route('/api/v1/wildfires/2008-2015')
-def wildfires_2008_2015():
-    return get_wildfires_data(collection3)
+@app.route('/api/v1/wildfires/2010-2015')
+def wildfires_2010_2015():
+    return get_sample_wildfires_data(collection3)
 
 
 @app.route('/api/v1/mapbox')
