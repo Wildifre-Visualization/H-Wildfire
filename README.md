@@ -6,4 +6,7 @@ User Instructions:
 - The flask 'app.py' will need to be executed within a python dev environmnet to access the data/visualiztions.  When the api is opened in the default browser, the user need only click the link beneath the map visualizion note to access our Mapbox heatmap. The top left corner of the map has a layer control for the 3 5-year time periods along with an interacive scale that allows the user to view more or less wildifre data points.
 
 Ethical Consideration:
-- Our data was sourced and manipulated with intent purely dervied from scientific curiosity.  The visualiztions were created to gain a higher level of comprehension behind lighting wildfire causality.  Users are authorized to use our with same intent used to create it.  Authorized users are permitted to apply our visualiztions to develop better methods of response, containment and prevention of such disastorous events.  Users who intend to use this dataset/visualiztion to extort the population and natural resources within 'hot zones' are not authorized to use our dataset. 
+- Our data was sourced and manipulated with intent purely dervied from scientific curiosity.  The visualiztions were created to gain a higher level of comprehension behind lightning wildfire causality.  Users are authorized to use our with same intent used to create it.  Authorized users are permitted to apply our visualiztions to develop better methods of response, containment and prevention of such disastorous events.  Users who intend to use this dataset/visualiztion to extort the population and natural resources within 'hot zones' are not authorized to use our dataset.
+
+Data References:
+- Original CSV, https://www.kaggle.com/datasets/aestheteaman01/278k-us-wildfires-due-to-lightning-2004-2015
