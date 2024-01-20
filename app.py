@@ -126,24 +126,48 @@ def get_all_wildfires_data_paginated(collection, page, per_page):
 @app.route("/")
 def welcome():
     """List all available API routes."""
-    return (
-        f"Available Routes:<br><br/>"
-        f"<a href='/api/v1/wildfires/2000-2004/sample'>/api/v1/wildfires/2000-2004/sample</a> - 2000 - 2004. Sample data for first 5 results.<br/>"
-        f"<a href='/api/v1/wildfires/2005-2009/sample'>/api/v1/wildfires/2005-2009/sample</a> - 2005 - 2009. Sample data for first 5 results.<br/>"
-        f"<a href='/api/v1/wildfires/2010-2015/sample'>/api/v1/wildfires/2010-2015/sample</a> - 2010 - 2015. Sample data for first 5 results.<br/>"
-        f"<br><br/>"
-        f"<a href='/api/v1/wildfires/2000-2004/all'>/api/v1/wildfires/2000-2004/all</a> - 2000 - 2004. Pagination results. Limited to 500 per page.<br/>"
-        f"<a href='/api/v1/wildfires/2005-2009/all'>/api/v1/wildfires/2005-2009/all</a> - 2005 - 2009. Pagination results. Limited to 500 per page.<br/>"
-        f"<a href='/api/v1/wildfires/2010-2015/all'>/api/v1/wildfires/2010-2015/all</a> - 2010 - 2015. Pagination results. Limited to 500 per page.<br/>"
-        f"<br><br/>"
-        f"Usage: <br><br/>"
-        f"To retrieve the first page of 10 results for 2000 - 2004: <a href='/api/v1/wildfires/2000-2004/all?page=1&per_page=10'>/api/v1/wildfires/2000-2004/all?page=1&per_page=10</a><br/>"
-        f"To retrieve the first page of 10 results for 2005 - 2009: <a href='/api/v1/wildfires/2005-2009/all?page=1&per_page=10'>/api/v1/wildfires/2005-2009/all?page=1&per_page=10</a><br/>"
-        f"To retrieve the first page of 10 results for 2010 - 2015: <a href='/api/v1/wildfires/2010-2015/all?page=1&per_page=10'>/api/v1/wildfires/2010-2015/all?page=1&per_page=10</a><br/>"
-        f"<br><br/>"
-        f"Mapbox:<br><br/>"
-        f"<a href='/api/v1/mapbox'>/api/v1/mapbox</a><br>"
-    )
+    return """
+    <html>
+    <head><title>API Welcome</title></head>
+    <body>
+        <h1>Welcome to the Wildfires API!</h1>
+        <p>Use the following routes to access the wildfire data:</p>
+        <ul>
+            <li>
+                <a href='/api/v1/wildfires/2000-2004/sample'>Sample Data (2000-2004)</a>:
+                Retrieve the first 5 results for the 2000-2004 dataset.
+            </li>
+            <li>
+                <a href='/api/v1/wildfires/2005-2009/sample'>Sample Data (2005-2009)</a>:
+                Retrieve the first 5 results for the 2005-2009 dataset.
+            </li>
+            <li>
+                <a href='/api/v1/wildfires/2010-2015/sample'>Sample Data (2010-2015)</a>:
+                Retrieve the first 5 results for the 2010-2015 dataset.
+            </li>
+            <li>
+                <a href='/api/v1/geojson/2000-2004?page=1&per_page=500'>Paginated GeoJSON Data (2000-2004)</a>:
+                Retrieve paginated results for the 2000-2004 dataset.
+                Modify the 'page' and 'per_page' query parameters as needed.
+            </li>
+            <li>
+                <a href='/api/v1/geojson/2005-2009?page=1&per_page=500'>Paginated GeoJSON Data (2005-2009)</a>:
+                Retrieve paginated results for the 2005-2009 dataset.
+                Modify the 'page' and 'per_page' query parameters as needed.
+            </li>
+            <li>
+                <a href='/api/v1/geojson/2010-2015?page=1&per_page=500'>Paginated GeoJSON Data (2010-2015)</a>:
+                Retrieve paginated results for the 2010-2015 dataset.
+                Modify the 'page' and 'per_page' query parameters as needed.
+            </li>
+        </ul>
+        <p>Map visualization:</p>
+        <ul>
+            <li><a href='/api/v1/mapbox'>View Map</a></li>
+        </ul>
+    </body>
+    </html>
+    """
 
 
 @app.route('/api/v1/wildfires/2000-2004/sample')
@@ -189,17 +213,23 @@ def show_html():
 
 @app.route('/api/v1/geojson/2000-2004')
 def geojson_2000_2004():
-    return get_geojson_data(collection1)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 500, type=int)
+    return get_all_wildfires_data_paginated(collection1, page, per_page)
 
 
 @app.route('/api/v1/geojson/2005-2009')
 def geojson_2005_2009():
-    return get_geojson_data(collection2)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 500, type=int)
+    return get_all_wildfires_data_paginated(collection2, page, per_page)
 
 
 @app.route('/api/v1/geojson/2010-2015')
 def geojson_2010_2015():
-    return get_geojson_data(collection3)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 500, type=int)
+    return get_all_wildfires_data_paginated(collection3, page, per_page)
 
 
 if __name__ == '__main__':
