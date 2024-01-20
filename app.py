@@ -1,33 +1,33 @@
-from flask import Flask
+from flask import Flask, Response
+from flask import render_template
 from pymongo import MongoClient
 import json
-from flask import jsonify
-from flask import render_template
 
 app = Flask(__name__)
 
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wildfires']
-collection1 = db['1992-1999']
-collection2 = db['2000-2007']
-collection3 = db['2008-2015']
 
+if '1992-1999' in db.list_collection_names():
+    db['1992-1999'].drop()
+if '2000-2007' in db.list_collection_names():
+    db['2000-2007'].drop()
+if '2008-2015' in db.list_collection_names():
+    db['2008-2015'].drop()
 
-# def load_data():
-#     file_path = './Resources/wildfires_1992_1999.geojson'
-#     with open(file_path, 'r') as file:
-#         data = json.load(file)
-#         # Check if data is already loaded in the database to avoid duplicate entries
-#         if collection1.count_documents({}) == 0:
-#             if isinstance(data, list):  # Check if data is a list of records
-#                 collection1.insert_many(data)  # Use insert_many for list
-#             else:
-#                 # Use insert_one for a single record
-#                 collection1.insert_one(data)
-#         else:
-#             print("Data already loaded in the database.")
-#     return
+if '2000-2004' in db.list_collection_names():
+    db['2000-2004'].drop()
+if '2005-2009' in db.list_collection_names():
+    db['2005-2009'].drop()
+if '2010-2015' in db.list_collection_names():
+    db['2010-2015'].drop()
+
+# Create new collections based on appropriate years
+collection1 = db['2000-2004']
+collection2 = db['2005-2009']
+collection3 = db['2010-2015']
+
 file_paths = [
     './Resources/first_years.geojson',
     './Resources/second_years.geojson',
@@ -74,8 +74,9 @@ def get_sample_wildfires_data(collection):
                 break
         if len(formatted_data) >= 5:
             break
+    response = json.dumps(formatted_data, indent=4)
 
-    return jsonify({"features": formatted_data[:5]})
+    return Response(response, mimetype='application/json')
 
 
 def get_all_wildfires_data(collection):
@@ -90,8 +91,9 @@ def get_all_wildfires_data(collection):
     for data in data_list:
         for feature in data['features']:
             formatted_data.append(feature)
+    response = json.dumps(formatted_data, indent=4)
 
-    return jsonify({"features": formatted_data})
+    return Response(response, mimetype='application/json')
 
 
 @app.route("/")
