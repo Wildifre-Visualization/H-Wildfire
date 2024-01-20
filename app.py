@@ -164,6 +164,7 @@ def welcome():
         <p>Map visualization:</p>
         <ul>
             <li><a href='/api/v1/mapbox'>View Map</a></li>
+            The data is loaded from the GeoJSON endpoints above into a Mapbox map. The number of fires to display (0 - 10,000) can be adjusted. NOTE: Larger numbers of fires will take longer to load because your browser will need to download more data from the API.
         </ul>
     </body>
     </html>
